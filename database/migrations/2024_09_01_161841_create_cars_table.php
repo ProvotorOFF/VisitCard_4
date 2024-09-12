@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('brand');
             $table->string('model');
             $table->integer('price');
+            $table->tinyInteger('transmission_type_id');
             $table->timestamps();
         });
     }

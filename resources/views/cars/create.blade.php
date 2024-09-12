@@ -1,32 +1,23 @@
-<form action="{{ !isset($car) ? route('cars.store') : route('cars.update', compact('car')) }}" method="POST">
-    @csrf
+<x-layouts.main>
+    <a href="{{ route('cars.index') }}">На главную</a>
+    <form action="{{ !isset($car) ? route('cars.store') : route('cars.update', compact('car')) }}" method="POST"
+        class="form mb-2">
+        @csrf
+        @if (isset($car))
+            @method('put')
+        @endif
+        <x-inputs.input type="text" name="brand" value="{{ isset($car) ? $car->brand : '' }}" label="Марка" />
+        <x-inputs.input type="text" name="model" value="{{ isset($car) ? $car->model : '' }}" label="Модель" />
+        <x-inputs.input type="number" name="price" value="{{ isset($car) ? $car->price : '' }}" label="Цена" />
+        <x-inputs.select name="transmission_type_id" selected="{{ isset($car) ? $car->transmission_type_id : '' }}"
+            label="Коробка передач" :values="config('app.transmissions')" />
+        <button>{{ isset($car) ? 'Обновить машину' : 'Создать машину' }}</button>
+    </form>
     @if (isset($car))
-        @method('put')
+        <form action="{{ route('cars.destroy', compact('car')) }}" method="POST">
+            @method('delete')
+            @csrf
+            <button>Удалить машину</button>
+        </form>
     @endif
-    <label for="brand">Марка</label>
-    <input type="text" name="brand" id="brand" value="{{ isset($car) ? $car->brand : '' }}" />
-    @error('brand')
-        {{ $message }}
-    @enderror
-    <br>
-    <label for="model">Модель</label>
-    <input type="text" name="model" id="model" value="{{ isset($car) ? $car->model : '' }}" />
-    @error('model')
-        {{ $message }}
-    @enderror
-    <br>
-    <label for="price">Цена</label>
-    <input type="number" step="1000" name="price" id="price" value="{{ isset($car) ? $car->price : '' }}" />
-    @error('price')
-        {{ $message }}
-    @enderror
-    <br>
-    <button>{{ isset($car) ? 'Обновить машину' : 'Создать машину' }}</button>
-</form>
-@if (isset($car))
-<form action="{{route('cars.destroy', compact('car')) }}" method="POST">
-    @method('delete')
-    @csrf
-    <button>Удалить машину</button>
-</form>
-@endif
+</x-layouts.main>

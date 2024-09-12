@@ -123,4 +123,15 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'transmissions' => [
+        1 => (object)[
+            'id' => 1,
+            'label' => 'Механическая'
+        ],
+        2 => (object)[
+            'id' => 2,
+            'label' => 'Автоматическая'
+        ]
+    ]
+
 ];

@@ -12,6 +12,7 @@ class Car extends Model
     protected $fillable = [
         'brand',
         'model',
-        'price'
+        'price',
+        'transmission_type_id'
     ];
 }
