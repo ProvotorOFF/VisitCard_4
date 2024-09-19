@@ -1,14 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Cars;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CarSaveRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
@@ -23,7 +20,7 @@ class CarSaveRequest extends FormRequest
     {
         return [
             'brand' => 'string|min:3|max:255|required',
-            'model' => 'string|min:3|max:255|required|unique:cars',
+            'model' => 'string|min:3|max:255|required',
             'price' => 'multiple_of:1000',
             'transmission_type_id' => 'int|between:1,2'
         ];

@@ -10,7 +10,7 @@
         <x-inputs.input type="text" name="model" value="{{ isset($car) ? $car->model : '' }}" label="Модель" />
         <x-inputs.input type="number" name="price" value="{{ isset($car) ? $car->price : '' }}" label="Цена" />
         <x-inputs.select name="transmission_type_id" selected="{{ isset($car) ? $car->transmission_type_id : '' }}"
-            label="Коробка передач" :values="config('app.transmissions')" />
+            label="Коробка передач" :values="config('app-cars.transmissions')" />
         <button>{{ isset($car) ? 'Обновить машину' : 'Создать машину' }}</button>
     </form>
     @if (isset($car))
