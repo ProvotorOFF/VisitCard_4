@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Cars;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest
 {
@@ -18,11 +19,20 @@ class StoreRequest extends FormRequest
      */
     public function rules(): array
     {
+        $transmissions = config('app-cars.transmissions');
+        $carId = $this?->id;
+
         return [
             'brand' => 'string|min:3|max:255|required',
-            'model' => 'string|min:3|max:255|required',
+            'model' => [
+                'string',
+                'min:3',
+                'max:255',
+                'required',
+                Rule::unique('cars')->ignore($carId)->whereNull('deleted_at')
+            ],
             'price' => 'multiple_of:1000',
-            'transmission_type_id' => 'int|between:1,2'
+            'transmission_type_id' => ['int', Rule::in(array_map(fn($item) => $item->id, $transmissions))]
         ];
     }
 

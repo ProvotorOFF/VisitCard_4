@@ -30,7 +30,7 @@ class CarController extends Controller
     public function store(StoreRequest $request)
     {
         $car = Car::create($request->validated());
-        return redirect()->route('cars.show', compact('car'));
+        return redirect()->route('cars.show', compact('car'))->with('message', 'Сохранено успешно');
     }
 
     /**
@@ -39,6 +39,12 @@ class CarController extends Controller
     public function show(Car $car)
     {
         return view('cars.show', compact('car'));
+    }
+
+    public function trashed()
+    {
+        $cars = Car::onlyTrashed()->get();
+        return view('cars.trashed', compact('cars'));
     }
 
     /**
@@ -55,7 +61,7 @@ class CarController extends Controller
     public function update(StoreRequest $request, Car $car)
     {
         $car->update($request->validated());
-        return redirect()->route('cars.show', compact('car')); 
+        return redirect()->route('cars.show', compact('car'))->with('message', 'Сохранено успешно');
     }
 
     /**
@@ -65,5 +71,19 @@ class CarController extends Controller
     {
         $car->delete();
         return redirect()->route('cars.index');
+    }
+
+    public function restore(int $car)
+    {
+        $car = Car::onlyTrashed()->findOrFail($car);
+        $existingCar = Car::where('model', $car->model)
+            ->whereNull('deleted_at')
+            ->exists();
+
+        if ($existingCar) {
+            return redirect()->back()->with('message', 'Ошибка: машина с такой моделью уже существует');
+        }
+        $car->restore();
+        return redirect()->route('cars.index')->with('message', 'Машина успешно восстановлена');
     }
 }

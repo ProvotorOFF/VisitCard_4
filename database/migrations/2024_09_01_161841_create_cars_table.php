@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('price');
             $table->tinyInteger('transmission_type_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
