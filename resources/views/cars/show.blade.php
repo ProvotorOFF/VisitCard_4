@@ -6,8 +6,10 @@
     @endif
     <a href="{{ route('cars.index') }}">На главную</a>
 
-    <div>Марка: {{ $car->brand }}</div>
+    <div>Марка: {{ $car->brand->name }}</div>
     <div>Модель: {{ $car->model }}</div>
     <div>Цена: {{ $car->price }}</div>
-    <div>Коробка передач: {{ config('app-cars.transmissions')[$car->transmission_type_id]->label }}</div>
+    <div>Коробка передач: {{ $transmissions[$car->transmission_type_id] }}</div>
+    <div>VIN: {{ $car->vin }}</div>
+    <div>Теги: {{ $car->tags->pluck('name')->implode(', ') }}</div>
 </x-layouts.main>

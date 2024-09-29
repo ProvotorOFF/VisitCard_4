@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Cars\StoreRequest;
+use App\Models\Brand;
 use App\Models\Car;
+use App\Models\Tag;
 
 class CarController extends Controller
 {
@@ -12,7 +14,7 @@ class CarController extends Controller
      */
     public function index()
     {
-        $cars = Car::all();
+        $cars = Car::with('brand')->get();
         return view('cars.index', compact('cars'));
     }
 
@@ -21,7 +23,10 @@ class CarController extends Controller
      */
     public function create()
     {
-        return view('cars.create');
+        $transmissions = config('app-cars.transmissions');
+        $brands = Brand::pluck('name', 'id');
+        $tags = Tag::pluck('name', 'id');
+        return view('cars.create', compact('transmissions', 'brands', 'tags'));
     }
 
     /**
@@ -30,7 +35,8 @@ class CarController extends Controller
     public function store(StoreRequest $request)
     {
         $car = Car::create($request->validated());
-        return redirect()->route('cars.show', compact('car'))->with('message', 'Сохранено успешно');
+        $car->tags()->sync($request->tags ?? []);
+        return redirect()->route('cars.show', compact('car'))->with('message', trans('cars.actions.saved'));
     }
 
     /**
@@ -38,7 +44,8 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
-        return view('cars.show', compact('car'));
+        $transmissions = config('app-cars.transmissions');
+        return view('cars.show', compact('car', 'transmissions'));
     }
 
     public function trashed()
@@ -52,7 +59,10 @@ class CarController extends Controller
      */
     public function edit(Car $car)
     {
-        return view('cars.create', compact('car'));
+        $transmissions = config('app-cars.transmissions');
+        $brands = Brand::pluck('name', 'id');
+        $tags = Tag::pluck('name', 'id');
+        return view('cars.create', compact('car', 'brands', 'transmissions', 'tags'));
     }
 
     /**
@@ -61,7 +71,8 @@ class CarController extends Controller
     public function update(StoreRequest $request, Car $car)
     {
         $car->update($request->validated());
-        return redirect()->route('cars.show', compact('car'))->with('message', 'Сохранено успешно');
+        $car->tags()->sync($request->tags ?? []);
+        return redirect()->route('cars.show', compact('car'))->with('message', trans('cars.actions.saved'));
     }
 
     /**
@@ -76,14 +87,14 @@ class CarController extends Controller
     public function restore(int $car)
     {
         $car = Car::onlyTrashed()->findOrFail($car);
-        $existingCar = Car::where('model', $car->model)
+        $existingCar = Car::where('vin', $car->vin)
             ->whereNull('deleted_at')
             ->exists();
 
         if ($existingCar) {
-            return redirect()->back()->with('message', 'Ошибка: машина с такой моделью уже существует');
+            return redirect()->back()->with('message', trans('cars.errors.vin', ['vin' => $car->vin]));
         }
         $car->restore();
-        return redirect()->route('cars.index')->with('message', 'Машина успешно восстановлена');
+        return redirect()->route('cars.index')->with('message', trans('cars.actions.restored'));
     }
 }

@@ -16,7 +16,7 @@
 
 <body>
     <header class="header">
-        <div class="container">This is HEEEEADERRR</div>
+        <div class="container">Header Template</div>
     </header>
     <main class="main">
         <div class="container">
@@ -25,7 +25,7 @@
         </div>
     </main>
     <footer class="footer">
-        <div class="container">This is FOOOOOOTER!!!!</div>
+        <div class="container">Footer Template</div>
     </footer>
     @vite(['resources/js/app.js'])
 </body>
