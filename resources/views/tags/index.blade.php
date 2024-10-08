@@ -1,5 +1,6 @@
 <x-layouts.main>
     <a href="{{ route('tags.create') }}">Создать тег</a>
+    <a href="{{ route('index') }}">На главную</a>
     @foreach ($tags ?? [] as $tag)
         <p>{{ $tag->id }} - {{ $tag->name }}
             <a href="{{ route('tags.show', [$tag]) }}">Посмотреть</a>|

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\enums\Status;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,7 +20,12 @@ class Car extends Model
         'model',
         'price',
         'transmission_type_id',
-        'vin'
+        'vin',
+        'status_id'
+    ];
+
+    protected $casts = [
+        'status_id' => Status::class
     ];
 
     public function brand(): BelongsTo {
@@ -28,4 +35,17 @@ class Car extends Model
     public function tags(): BelongsToMany {
         return $this->belongsToMany(Tag::class);
     }
+
+    public function comments() {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function getRemovableAttribue(): bool {
+        return $this->status != Status::ACTIVE;
+    }
+
+    public function scopeOfActive(Builder $query): Builder {
+        return $query->where('status', Status::ACTIVE);
+    }
+
 }

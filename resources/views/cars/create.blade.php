@@ -1,6 +1,7 @@
 <x-layouts.main>
-    <a href="{{ route('cars.index') }}">На главную</a>
-    <form action="{{ !isset($car) ? route('cars.store') : route('cars.update', compact('car')) }}" method="POST" class="form mb-2">
+    <a href="{{ route('cars.index') }}">К машинам</a>
+    <form action="{{ !isset($car) ? route('cars.store') : route('cars.update', compact('car')) }}" method="POST"
+        class="form mb-2">
         @csrf
         @if (isset($car))
             @method('put')
@@ -13,6 +14,8 @@
             label="Коробка передач" :values="$transmissions" />
         <x-inputs.input type="text" name="vin" value="{{ isset($car) ? $car->vin : '' }}" label="VIN номер" />
         <x-inputs.multiselect name="tags" :selected="isset($car) ? $car->tags->pluck('id')->toArray() : []" label="Марка" :values="$tags" />
+        <x-inputs.select name="status_id" selected="{{ isset($car) ? $car->status_id : '' }}"
+            label="Статус" :values="$statuses" />
         <button>{{ isset($car) ? 'Обновить машину' : 'Создать машину' }}</button>
     </form>
     @if (isset($car))

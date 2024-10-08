@@ -1,5 +1,5 @@
 <x-layouts.main>
-    <a href="{{ route('brands.index') }}">На главную</a>
+    <a href="{{ route('brands.index') }}">К брендам</a>
     <form action="{{ !isset($brand) ? route('brands.store') : route('brands.update', compact('brand')) }}" method="POST"
         class="form mb-2">
         @csrf

@@ -1,5 +1,6 @@
 <x-layouts.main>
     <a href="{{ route('brands.create') }}">Создать бренд</a>
+    <a href="{{ route('index') }}">На главную</a>
     @foreach ($brands ?? [] as $brand)
         <p>{{ $brand->id }} - {{ $brand->name }}
             <a href="{{ route('brands.show', [$brand]) }}">Посмотреть</a>|

@@ -1,5 +1,5 @@
 <x-layouts.main>
-    <a href="{{ route('tags.index') }}">На главную</a>
+    <a href="{{ route('tags.index') }}">К тегам</a>
     <form action="{{ !isset($brand) ? route('tags.store') : route('tags.update', compact('brand')) }}" method="POST"
         class="form mb-2">
         @csrf

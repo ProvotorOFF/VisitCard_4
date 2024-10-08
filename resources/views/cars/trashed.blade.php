@@ -1,6 +1,6 @@
 <x-layouts.main>
     <h1>Корзина — Удалённые машины</h1>
-    <a href="{{ route('cars.index') }}">На главную</a>
+    <a href="{{ route('cars.index') }}">К машинам</a>
     @if (session('message'))
         <div class="alert alert-danger">
             {{ session('message') }}

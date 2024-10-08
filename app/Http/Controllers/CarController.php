@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\enums\Status;
 use App\Http\Requests\Cars\StoreRequest;
 use App\Models\Brand;
 use App\Models\Car;
 use App\Models\Tag;
+use Illuminate\Http\Request;
 
 class CarController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $cars = Car::with('brand')->get();
+        $carsQuery = Car::with('brand');
+        if ($request->get('status') == 'active') {
+            $carsQuery->ofActive();
+        }
+        $cars = $carsQuery->get();
         return view('cars.index', compact('cars'));
     }
 
@@ -26,7 +32,8 @@ class CarController extends Controller
         $transmissions = config('app-cars.transmissions');
         $brands = Brand::pluck('name', 'id');
         $tags = Tag::pluck('name', 'id');
-        return view('cars.create', compact('transmissions', 'brands', 'tags'));
+        $statuses = Status::getAllWithKeys();
+        return view('cars.create', compact('transmissions', 'brands', 'tags', 'statuses'));
     }
 
     /**
@@ -45,7 +52,8 @@ class CarController extends Controller
     public function show(Car $car)
     {
         $transmissions = config('app-cars.transmissions');
-        return view('cars.show', compact('car', 'transmissions'));
+        $type = Car::class;
+        return view('cars.show', compact('car', 'transmissions', 'type'));
     }
 
     public function trashed()
@@ -62,7 +70,8 @@ class CarController extends Controller
         $transmissions = config('app-cars.transmissions');
         $brands = Brand::pluck('name', 'id');
         $tags = Tag::pluck('name', 'id');
-        return view('cars.create', compact('car', 'brands', 'transmissions', 'tags'));
+        $statuses = Status::getAllWithKeys();
+        return view('cars.create', compact('car', 'brands', 'transmissions', 'tags', 'statuses'));
     }
 
     /**

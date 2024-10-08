@@ -4,7 +4,7 @@
             {{ session('message') }}
         </div>
     @endif
-    <a href="{{ route('tags.index') }}">На главную</a>
+    <a href="{{ route('tags.index') }}">К тегам</a>
 
     <div>Бренд: {{ $tag->name }}</div>
 </x-layouts.main>
