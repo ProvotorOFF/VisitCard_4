@@ -1,15 +1,16 @@
 @props(['name', 'selected' => [], 'label', 'values' => []])
-<div class="mb-1">
-    <label for="{{ $name }}[]" style="width:145px;">{{ $label }}</label>
-    <select name="{{ $name }}[]" id="{{ $name }}" multiple>
+
+<div class="mb-3">
+    <label for="{{ $name }}[]" class="form-label">{{ $label }}</label>
+    <select name="{{ $name }}[]" id="{{ $name }}" class="form-select" multiple>
         @foreach ($values as $id => $value)
             <option value="{{ $id }}" @selected($errors->any() ? in_array($id, old($name, [])) : in_array($id, $selected))>{{ $value }}</option>
         @endforeach
     </select>
     @error($name)
-        <span style="color: red">{{ $message }}</span>
+        <span class="text-danger">{{ $message }}</span>
     @enderror
     @error("$name.*")
-    <span style="color: red">{{ $message }}</span>
-@enderror
+        <span class="text-danger">{{ $message }}</span>
+    @enderror
 </div>

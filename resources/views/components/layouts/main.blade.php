@@ -16,7 +16,30 @@
 
 <body>
     <header class="header">
-        <div class="container">Header Template</div>
+        <div class="container">
+            <div class="header__logo">
+
+            </div>
+            <nav class="header__menu-nav">
+                <ul class="header__menu-list">
+                    @auth
+                    <li class="header__menu-item">
+                        Личный кабинет
+                    </li>
+                    <li class="header__menu-item">
+                        Выход
+                    </li>
+                    @else
+                    <li class="header__menu-item">
+                        <a href="">Авторизация</a>
+                    </li>
+                    <li class="header__menu-item">
+                        <a href="{{route('auth.register.create')}}">Регистрация</a>
+                    </li>
+                    @endauth
+                </ul>
+            </nav>
+        </div>
     </header>
     <main class="main">
         <div class="container">

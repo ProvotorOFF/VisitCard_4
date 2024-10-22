@@ -11,7 +11,7 @@ Route::get('/', function () {
 })->name('index');
 
 Route::get('cars/trashed', [CarController::class, 'trashed'])->name('cars.trashed');
-Route::post('cars/{car}/restore', [CarController::class, 'restore'])->name('cars.restore'); 
+Route::post('cars/{car}/restore', [CarController::class, 'restore'])->name('cars.restore');
 Route::resource('cars', CarController::class);
 Route::resource('brands', BrandController::class);
 Route::resource('tags', TagController::class);
@@ -19,3 +19,4 @@ Route::post('comments/car/{car}', [CommentController::class, 'storeForCar'])->na
 Route::post('comments/brand/{brand}', [CommentController::class, 'storeForBrand'])->name('comments.store_brand');
 Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
+require __DIR__ . '/auth.php';
