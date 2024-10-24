@@ -12,8 +12,10 @@ Route::prefix('auth')->name('auth.')->group(function () {
     });
 });
 
-Route::controller(EmailVerificationController::class)->middleware(EnsureEmailIsNotVerifed::class)->name('verification.')->group(function () {
-    Route::get('verify-email', 'index')->name('notice')->middleware('auth');
-    Route::get('verify-email/{id}/{hash}', 'create')->middleware(['signed', 'throttle:6,1'])->name('verify');
-    Route::post('verify-email', 'store')->middleware(['throttle:6,1'])->name('send');
+Route::controller(EmailVerificationController::class)->name('verification.')->group(function () {
+    Route::middleware(EnsureEmailIsNotVerifed::class)->group(function() {
+        Route::get('verify-email', 'index')->name('notice')->middleware('auth');
+        Route::post('verify-email', 'store')->middleware(['throttle:6,1'])->name('send');
+    });
+    Route::get('verify-email/{id}/{hash}', 'create')->middleware(['signed', 'throttle:6,1', 'auth'])->name('verify');
 });

@@ -10,10 +10,15 @@
                         <p>
                             {{ trans('auth.verification.instruction') }}
                         </p>
-                        <p>
-                            {{ trans('auth.verification.email_sent', ['email' => $user->email]) }}
-                        </p>
-
+                        @if(session('message'))
+                            <div class="alert alert-success">
+                                {{ session('message') }}
+                            </div>
+                        @else
+                            <p>
+                                {{ trans('auth.verification.email_sent', ['email' => $user->email]) }}
+                            </p>
+                        @endif
                         <form action="{{ route('verification.send') }}" method="POST">
                             @csrf
                             <button type="submit" class="btn btn-primary">
