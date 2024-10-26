@@ -1,14 +1,24 @@
 <?
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\RegisterUserController;
 use App\Http\Middleware\EnsureEmailIsNotVerifed;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->name('auth.')->group(function () {
-    Route::controller(RegisterUserController::class)->middleware('guest')->prefix('register')->name('register.')->group(function () {
-        Route::get('', 'create')->name('create');
-        Route::post('', 'store')->name('store');
+    Route::middleware('guest')->group(function() {
+        Route::controller(RegisterUserController::class)->prefix('register')->name('register.')->group(function () {
+            Route::get('', 'create')->name('create');
+            Route::post('', 'store')->name('store');
+        });
+        Route::controller(AuthenticatedSessionController::class)->name('login.')->group(function() {
+            Route::get('login', 'create')->name('create');
+            Route::post('login', 'store')->name('store');
+        });
+    });
+    Route::middleware('auth')->name('login.')->group(function() {
+        Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('destroy');
     });
 });
 

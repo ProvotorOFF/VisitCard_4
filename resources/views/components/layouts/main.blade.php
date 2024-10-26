@@ -16,34 +16,38 @@
 
 <body>
     <header class="header">
-        <div class="container">
-            <div class="header__logo">
-
-            </div>
-            <nav class="header__menu-nav">
-                <ul class="header__menu-list">
+        <nav class="navbar navbar-light bg-light">
+            <div class="container d-flex justify-content-between">
+                <a class="navbar-brand" href="#">
+                    {{ $title }}
+                </a>
+                <ul class="navbar-nav d-flex flex-row">
                     @auth
-                    <li class="header__menu-item">
-                        Личный кабинет
-                    </li>
-                    <li class="header__menu-item">
-                        Выход
-                    </li>
+                        <li class="nav-item mx-2">
+                            <a class="nav-link" href="#">Личный кабинет</a>
+                        </li>
+                        <li class="nav-item mx-2">
+                            <form action="{{ route('auth.login.destroy') }}" method="POST" style="display: flex; height: 40px;">
+                                @csrf
+                                <button type="submit" class="nav-link">
+                                    Выход
+                                </button>
+                            </form>
+                        </li>
                     @else
-                    <li class="header__menu-item">
-                        <a href="">Авторизация</a>
-                    </li>
-                    <li class="header__menu-item">
-                        <a href="{{route('auth.register.create')}}">Регистрация</a>
-                    </li>
+                        <li class="nav-item mx-2">
+                            <a class="nav-link" href="{{ route('auth.login.create') }}">Авторизация</a>
+                        </li>
+                        <li class="nav-item mx-2">
+                            <a class="nav-link" href="{{ route('auth.register.create') }}">Регистрация</a>
+                        </li>
                     @endauth
                 </ul>
-            </nav>
-        </div>
+            </div>
+        </nav>
     </header>
     <main class="main">
-        <div class="container">
-            <h1>{{ $h1 ?? $title }}</h1>
+        <div class="container pt-5">
             {{ $slot }}
         </div>
     </main>
