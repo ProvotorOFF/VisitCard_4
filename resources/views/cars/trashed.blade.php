@@ -1,15 +1,15 @@
 <x-layouts.main>
-    <h1>Корзина — Удалённые машины</h1>
-    <a href="{{ route('cars.index') }}">К машинам</a>
+    <h1>Удалённые машины</h1>
     @if (session('message'))
         <div class="alert alert-danger">
             {{ session('message') }}
         </div>
     @endif
+
     @if ($cars->isEmpty())
         <p>Корзина пуста.</p>
     @else
-        <table>
+        <table class="table">
             <thead>
                 <tr>
                     <th>Бренд</th>
@@ -20,13 +20,17 @@
             <tbody>
                 @foreach ($cars as $car)
                     <tr>
-                        <td>{{ $car->brand }}</td>
+                        <td>{{ $car->brand->name }}</td>
                         <td>{{ $car->model }}</td>
                         <td>
-                            <form action="{{ route('cars.restore', $car->id) }}" method="POST">
-                                @csrf
-                                <button type="submit">Восстановить</button>
-                            </form>
+                            @auth
+                                <form action="{{ route('cars.restore', $car->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary">Восстановить</button>
+                                </form>
+                            @else
+                                <span>Восстановление доступно только авторизованным пользователям.</span>
+                            @endauth
                         </td>
                     </tr>
                 @endforeach

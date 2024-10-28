@@ -4,33 +4,38 @@
             {{ session('message') }}
         </div>
     @endif
-    <a href="{{ route('cars.index') }}">К машинам</a>
+    <div class="mb-3">
+        <h5>Марка: {{ $car->brand->name }}</h5>
+        <h6>Модель: {{ $car->model }}</h6>
+        <p>Цена: {{ $car->price }}</p>
+        <p>Коробка передач: {{ $transmissions[$car->transmission_type_id] }}</p>
+        <p>VIN: {{ $car->vin }}</p>
+        <p>Теги: {{ $car->tags->pluck('name')->implode(', ') }}</p>
+        <p>Статус: {{ $car->status_id->getName() }}</p>
+    </div>
 
-    <div>Марка: {{ $car->brand->name }}</div>
-    <div>Модель: {{ $car->model }}</div>
-    <div>Цена: {{ $car->price }}</div>
-    <div>Коробка передач: {{ $transmissions[$car->transmission_type_id] }}</div>
-    <div>VIN: {{ $car->vin }}</div>
-    <div>Теги: {{ $car->tags->pluck('name')->implode(', ') }}</div>
-    <div>Статус: {{ $car->status_id->getName() }}</div>
-
-    <form action="{{ route('comments.store_car', ['car' => $car]) }}" method="post">
+    <form action="{{ route('comments.store_car', ['car' => $car]) }}" method="post" class="mb-3">
         @csrf
-        <textarea name="text" id="text" cols="30" rows="10"></textarea>
-        @error('text')
-            <span style="color: red">{{ $message }}</span>
-        @enderror
-        <button>Комментировать</button>
+        <div class="mb-3">
+            <label for="text" class="form-label">Ваш комментарий</label>
+            <textarea name="text" id="text" cols="30" rows="5" class="form-control"></textarea>
+            @error('text')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+        <button class="btn btn-primary">Комментировать</button>
     </form>
-    @if ($car->comments)
-        Комментарии:
-        <ul>
+
+    @if ($car->comments && count($car->comments) > 0)
+        <h6>Комментарии:</h6>
+        <ul class="list-group">
             @foreach ($car->comments as $comment)
-                <li>
-                    {{ $comment->id }} {{ $comment->text }}
+                <li class="list-group-item">
+                    {{ $comment->id }} - {{ $comment->text }}
                 </li>
             @endforeach
         </ul>
+    @else
+        <p>Комментариев нет.</p>
     @endif
-
 </x-layouts.main>
