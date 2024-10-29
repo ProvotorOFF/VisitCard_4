@@ -12,8 +12,7 @@ Route::get('/', function () {
 
 
 Route::get('cars/trashed', [CarController::class, 'trashed'])->name('cars.trashed');
-Route::post('comments/car/{car}', [CommentController::class, 'storeForCar'])->name('comments.store_car');
-Route::post('comments/brand/{brand}', [CommentController::class, 'storeForBrand'])->name('comments.store_brand');
+Route::post('comments', [CommentController::class, 'store'])->name('comments.store');
 
 Route::resource('cars', CarController::class)->only(['index', 'show']);
 Route::resource('brands', BrandController::class)->only(['index', 'show']);

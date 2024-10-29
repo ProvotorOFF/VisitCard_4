@@ -12,31 +12,10 @@ class CommentController extends Controller
 {
 
 
-    private function store(StoreRequest $request)
+    public function store(StoreRequest $request)
     {
-        $comment = Comment::create($request->validated());
-    }
-
-    public function storeForCar(StoreRequest  $request, Car $car)
-    {
-        $request->replace(array_merge(
-            $request->all(), [
-                'commentable_type' => Car::class,
-                'commentable_id' => $car->id,
-            ]
-        ));
-        $this->store($request);
-        return redirect()->back();
-    }
-
-
-    public function storeForBrand(StoreRequest $request, Brand $brand)
-    {
-        $request->merge([
-            'commentable_type' => Brand::class,
-            'commentable_id' => $brand->id
-        ]);
-        $this->store($request);
+        $model = $request->isCommentable();
+        $model->comments()->save(Comment::make($request->only('text')));
         return redirect()->back();
     }
 

@@ -13,29 +13,6 @@
         <p>Теги: {{ $car->tags->pluck('name')->implode(', ') }}</p>
         <p>Статус: {{ $car->status_id->getName() }}</p>
     </div>
-
-    <form action="{{ route('comments.store_car', ['car' => $car]) }}" method="post" class="mb-3">
-        @csrf
-        <div class="mb-3">
-            <label for="text" class="form-label">Ваш комментарий</label>
-            <textarea name="text" id="text" cols="30" rows="5" class="form-control"></textarea>
-            @error('text')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
-        <button class="btn btn-primary">Комментировать</button>
-    </form>
-
-    @if ($car->comments && count($car->comments) > 0)
-        <h6>Комментарии:</h6>
-        <ul class="list-group">
-            @foreach ($car->comments as $comment)
-                <li class="list-group-item">
-                    {{ $comment->id }} - {{ $comment->text }}
-                </li>
-            @endforeach
-        </ul>
-    @else
-        <p>Комментариев нет.</p>
-    @endif
+    <x-comments.form model="car" id="{{ $car->id }}" />
+    <x-comments.list :model="$car" />
 </x-layouts.main>

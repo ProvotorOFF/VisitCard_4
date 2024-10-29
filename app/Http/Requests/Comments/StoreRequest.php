@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\Comments;
 
+use App\enums\Commentable;
 use App\Models\Brand;
 use App\Models\Car;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -26,9 +28,13 @@ class StoreRequest extends FormRequest
     {
         return [
             'text' => 'required|string|max:1000',
-            'commentable_type' => ['required', 'string', Rule::in([Car::class, Brand::class])],
-            'commentable_id' => 'required|integer'
+            'model' => ['required', 'string', Rule::in(Commentable::toArray())],
+            'id' => 'required|integer'
         ];
+    }
+
+    public function isCommentable(): Model {
+        return Commentable::fromString($this->model)::findOrFail($this->id);
     }
 
     public function attributes(): array
@@ -36,21 +42,5 @@ class StoreRequest extends FormRequest
         return [
             'text' => 'Текст',
         ];
-    }
-
-    protected function prepareForValidation()
-    {
-
-        if ($this->route('car')) {
-            $this->merge([
-                'commentable_type' => Car::class,
-                'commentable_id' => $this->route('car')->id,
-            ]);
-        } elseif ($this->route('brand')) {
-            $this->merge([
-                'commentable_type' => Brand::class,
-                'commentable_id' => $this->route('brand')->id,
-            ]);
-        }
     }
 }
