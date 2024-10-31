@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->text('text');
-            $table->unsignedBigInteger('commentable_id');
-            $table->string('commentable_type');
+            $table->morphs('commentable');
             $table->timestamps();
         });
     }
