@@ -28,7 +28,7 @@
                 <ul class="navbar-nav d-flex flex-row">
                     @auth
                         <li class="nav-item mx-2">
-                            <a class="nav-link" href="#">{{trans('header.cabinet')}}</a>
+                            <a class="nav-link" href="#"><icon src="social.person.materialicons.24px" /> {{trans('header.cabinet')}}</a>
                         </li>
                         <li class="nav-item mx-2">
                             <form action="{{ route('auth.login.destroy') }}" method="POST" style="display: flex; height: 40px;">

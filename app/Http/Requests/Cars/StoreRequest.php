@@ -3,8 +3,10 @@
 namespace App\Http\Requests\Cars;
 
 use App\enums\Status;
+use App\Services\AddressParser\ParserInterface;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class StoreRequest extends FormRequest
 {
@@ -30,19 +32,32 @@ class StoreRequest extends FormRequest
             'vin' => ['string', 'required', Rule::unique('cars')->ignore($car)->whereNull('deleted_at')],
             'tags' => 'required|array',
             'tags.*' => 'integer|exists:tags,id',
-            'status_id' => ['required|int', Rule::in(array_keys(Status::getAllWithKeys()))]
+            'status_id' => ['required', 'int', Rule::in(array_keys(Status::getAllWithKeys()))],
+            'seller_address' => 'required|string|nullable'
         ];
+    }
+
+    protected function prepareForValidation(): void {
+        $parser = app(ParserInterface::class);
+        if (!$this->seller_address) return;
+        $cleanAddress = $parser->getAddress($this->seller_address);
+        if (!isset($cleanAddress['result'])) throw ValidationException::withMessages(['seller_address' => 'Не удалось определить адрес!']);
+        $this->merge([
+            'seller_address' => $cleanAddress['result']
+        ]);
     }
 
     public function attributes(): array
     {
         return [
-            'brand' => 'Бренд',
+            'brand_id' => 'Бренд',
             'model' => 'Марка',
             'price' => 'Стоимость',
             'transmission_type_id' => 'Коробка передач',
             'vin' => 'VIN',
-            'tags' => 'Теги'
+            'tags' => 'Теги',
+            'status_id' => 'Статус',
+            'seller_address' => 'Адрес продавца'
         ];
     }
 }

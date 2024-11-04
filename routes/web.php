@@ -14,16 +14,16 @@ Route::get('/', function () {
 Route::get('cars/trashed', [CarController::class, 'trashed'])->name('cars.trashed');
 Route::post('comments', [CommentController::class, 'store'])->name('comments.store');
 
-Route::resource('cars', CarController::class)->only(['index', 'show']);
-Route::resource('brands', BrandController::class)->only(['index', 'show']);
-Route::resource('tags', TagController::class)->only(['index', 'show']);
-
 Route::middleware('auth')->group(function () {
-    Route::post('cars/{car}/restore', [CarController::class, 'restore'])->name('cars.restore');
     Route::resource('cars', CarController::class)->except(['index', 'show']);
+    Route::post('cars/{car}/restore', [CarController::class, 'restore'])->name('cars.restore');
     Route::resource('brands', BrandController::class)->except(['index', 'show']);
     Route::resource('tags', TagController::class)->except(['index', 'show']);
     Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
+
+Route::resource('cars', CarController::class)->only(['index', 'show']);
+Route::resource('brands', BrandController::class)->only(['index', 'show']);
+Route::resource('tags', TagController::class)->only(['index', 'show']);
 
 require __DIR__ . '/auth.php';

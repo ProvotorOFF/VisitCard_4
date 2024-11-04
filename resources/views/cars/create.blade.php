@@ -20,6 +20,7 @@
                 class="form-control mb-3" />
             <x-inputs.select name="status_id" selected="{{ isset($car) ? $car->status_id : '' }}" label="Статус"
                 :values="$statuses" class="form-control mb-3" />
+            <x-inputs.input name="seller_address"  type="text" value="{{ isset($car) ? $car->seller_address : '' }}" label="Адрес продавца" class="form-control mb-3" />
             <div class="d-flex justify-content-center">
                 <button class="btn btn-primary">{{ isset($car) ? 'Обновить машину' : 'Создать машину' }}</button>
             </div>

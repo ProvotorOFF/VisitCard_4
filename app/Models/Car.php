@@ -22,7 +22,8 @@ class Car extends Model
         'price',
         'transmission_type_id',
         'vin',
-        'status_id'
+        'status_id',
+        'seller_address'
     ];
 
     protected $casts = [

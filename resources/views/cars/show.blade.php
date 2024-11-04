@@ -12,6 +12,7 @@
         <p>VIN: {{ $car->vin }}</p>
         <p>Теги: {{ $car->tags->pluck('name')->implode(', ') }}</p>
         <p>Статус: {{ $car->status_id->getName() }}</p>
+        <p>Адрес продавца: {{ $car->seller_address ? $car->seller_address : 'Не указан' }}</p>
     </div>
     <x-comments.form model="car" id="{{ $car->id }}" />
     <x-comments.list :model="$car" />
